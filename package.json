@@ -6,10 +6,16 @@
     "tern-on-api": "npm run copy-db && npx yaml-server --hotReload=off --autoStart=off --port 3000 --database ./mockApi/db_stage.yaml",
     "copy-db": "node -e \"const fs = require('fs'); fs.copyFileSync('mockApi/db_back_up.yaml', 'mockApi/db_stage.yaml');\""
   },
-  "keywords": ["api", "mock", "yaml-server", "rest"],
+  "keywords": [
+    "api",
+    "mock",
+    "yaml-server",
+    "rest"
+  ],
   "author": "Denys Kulikov",
   "license": "ISC",
   "dependencies": {
+    "newman-reporter-html": "^1.0.5",
     "yaml-server": "^1.10.0"
   }
 }
