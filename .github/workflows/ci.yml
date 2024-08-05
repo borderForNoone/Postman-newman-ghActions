@@ -27,8 +27,10 @@ jobs:
         env:
           NODE_ENV: test
 
-      - name: Install Newman
-        run: npm install -g newman
+      - name: Install Newman and HTML Reporter
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-html
 
       - name: Run Newman tests
         run: newman run store.postman_collection.json -r html,json --reporter-html-export newman-report.html
