@@ -37,7 +37,9 @@ jobs:
 
       - name: Run Newman tests and generate HTML report
         id: newman
-        run: newman run store.postman_collection.json -r htmlextra --reporter-htmlextra-export newman/report.html
+        run: |
+          mkdir -p newman
+          newman run store.postman_collection.json -r htmlextra --reporter-htmlextra-export newman/report.html
 
       - name: Upload newman-report
         uses: actions/upload-artifact@v4
@@ -52,9 +54,10 @@ jobs:
     needs: newman-tests
     steps:
       - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
         with:
           ref: gh-pages
+          path: gh-pages
 
       - name: Download newman-report
         uses: actions/download-artifact@v4
@@ -64,15 +67,18 @@ jobs:
 
       - name: Copy files to gh-pages branch
         run: |
-          mkdir -p ./gh-pages
-          cp -R ./newman/* ./gh-pages/
-
-      - name: Commit and push to gh-pages
-        run: |
-          cd ./gh-pages
+          mkdir -p gh-pages
+          cp -R newman/* gh-pages/
+          cd gh-pages
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           git init
           git add .
           git commit -m "Deploy newman report"
           git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:gh-pages
+
+      - name: Print GitHub Pages URL
+        run: |
+          REPO_NAME=$(basename $GITHUB_REPOSITORY)
+          REPO_OWNER=$(dirname $GITHUB_REPOSITORY)
+          echo "GitHub Pages URL: https://${REPO_OWNER}.github.io/${REPO_NAME}/report.html"
