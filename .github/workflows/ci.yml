@@ -29,15 +29,25 @@ jobs:
         env:
           NODE_ENV: test
 
-      - name: Wait for server to be up
-        run: sleep 5 # Adjust the sleep duration as needed to ensure the server is up
-
-      - name: Create newman directory
-        run: mkdir -p newman
-
       - name: Run Postman Collection with Newman
+        run: newman run store.postman_collection.json
+        if: always()
+
+      - name: Create newman report
         run: newman run store.postman_collection.json -r json
-        continue-on-error: true
+        if: always()
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: newman-report
+          path: ./newman
+          retention-days: 1
+
+      - name: List contents of downloaded newman-report
+        if: always()
+        run: ls -R ./newman
 
   deploy:
     needs: newman-tests
