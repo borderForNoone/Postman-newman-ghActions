@@ -63,7 +63,7 @@ jobs:
       - name: Download newman-report
         uses: actions/download-artifact@v4
         with:
-          name: newman
+          name: newman-report
           path: ./newman
 
       - name: Copy files to gh-pages branch
