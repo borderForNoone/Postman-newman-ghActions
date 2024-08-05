@@ -41,8 +41,11 @@ jobs:
       - name: Verify existence of collection file
         run: ls -l store.postman_collection.json
 
-      - name: Run Newman tests
-        run: newman run store.postman_collection.json -r html,json --reporter-html-export newman-report.html
+      - name: Run Newman tests with JSON reporter
+        run: newman run store.postman_collection.json -r json --reporter-json-export=newman-report.json
+
+      - name: Run Newman tests with HTML reporter
+        run: newman run store.postman_collection.json -r html,json --reporter-html-export=newman-report.html
 
       - name: Deploy report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
