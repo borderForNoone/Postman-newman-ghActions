@@ -24,17 +24,23 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Newman HTML Reporter
+        run: npm install newman-reporter-html
+
       - name: Start local server
         run: npm run tern-on-api &
         env:
           NODE_ENV: test
+
+      - name: Wait for server to be up
+        run: sleep 5 # Adjust the sleep duration as needed to ensure the server is up
 
       - name: Run Postman Collection with Newman
         run: newman run store.postman_collection.json -r html,json --reporter-html-export newman/newman-run-report.html --reporter-json-export newman/newman-run-report.json
         if: always()
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         if: always()
         with:
           name: newman-report
