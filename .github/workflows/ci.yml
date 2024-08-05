@@ -31,7 +31,7 @@ jobs:
         run: npm install -g newman
 
       - name: Run Newman tests
-        run: newman run path/to/your/postman_collection.json -r html,json --reporter-html-export newman-report.html
+        run: newman run store.postman_collection.json -r html,json --reporter-html-export newman-report.html
 
       - name: Deploy report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
