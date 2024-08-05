@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  newman-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start local server
+        run: npm run tern-on-api &
+        env:
+          NODE_ENV: test
+
+      - name: Wait for server to be up
+        run: sleep 5 # Adjust the sleep duration as needed to ensure the server is up
+
+      - name: Run Postman Collection with Newman
+        run: newman run store.postman_collection.json

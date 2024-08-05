@@ -1,12 +1,13 @@
 {
   "name": "mock-rest-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Postman newman project",
   "scripts": {
-    "tern-on-api": "cp mockApi/db_back_up.yaml mockApi/db_stage.yaml && npx yaml-server --hotReload=off --autoStart=off --port 3000 --database ./mockApi/db_stage.yaml"
+    "tern-on-api": "npm run copy-db && npx yaml-server --hotReload=off --autoStart=off --port 3000 --database ./mockApi/db_stage.yaml",
+    "copy-db": "node -e \"const fs = require('fs'); fs.copyFileSync('mockApi/db_back_up.yaml', 'mockApi/db_stage.yaml');\""
   },
-  "keywords": ["api","mock","yaml-server","rest"],
-  "author": "",
+  "keywords": ["api", "mock", "yaml-server", "rest"],
+  "author": "Denys Kulikov",
   "license": "ISC",
   "dependencies": {
     "yaml-server": "^1.10.0"
