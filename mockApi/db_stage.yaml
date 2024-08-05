@@ -253,3 +253,15 @@ users:
   - name: ""
     email: invalidemail
     id: 33
+  - firstName: Dream
+    lastName: Real
+    email: dream.real@gmail.com
+    dateOfBirth: 2001-10-99
+    emailVerified: true
+    signUpDate: 2019-08-24
+    status: active
+    level: lord
+    id: 34
+  - name: ""
+    email: invalidemail
+    id: 35

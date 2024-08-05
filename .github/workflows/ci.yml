@@ -1,3 +1,5 @@
+name: Run Newman Tests and Deploy Report
+
 on:
   push:
     branches:
@@ -22,33 +24,22 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Newman and HTML Extra Reporter
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
       - name: Start local server
         run: npm run tern-on-api &
         env:
           NODE_ENV: test
 
-      - name: Install Newman and HTML Reporter
-        run: |
-          npm install -g newman
-          npm install -g newman-reporter-html
-
-      - name: Check Node.js and Newman versions
-        run: |
-          node --version
-          npm --version
-          newman --version
-
-      - name: Verify existence of collection file
-        run: ls -l store.postman_collection.json
-
-      - name: Run Newman tests with JSON reporter
-        run: newman run store.postman_collection.json -r json --reporter-json-export=newman-report.json
-
-      - name: Run Newman tests with HTML reporter
-        run: newman run store.postman_collection.json -r html,json --reporter-html-export=newman-report.html
+      - name: Run Newman tests and generate HTML report
+        run: newman run store.postman_collection.json -r htmlextra --reporter-htmlextra-export newman/report.html
 
       - name: Deploy report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./newman-report.html
+          folder: newman
+          branch: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
