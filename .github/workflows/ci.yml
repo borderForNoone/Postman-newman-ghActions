@@ -32,6 +32,15 @@ jobs:
           npm install -g newman
           npm install -g newman-reporter-html
 
+      - name: Check Node.js and Newman versions
+        run: |
+          node --version
+          npm --version
+          newman --version
+
+      - name: Verify existence of collection file
+        run: ls -l store.postman_collection.json
+
       - name: Run Newman tests
         run: newman run store.postman_collection.json -r html,json --reporter-html-export newman-report.html
 
