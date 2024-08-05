@@ -33,7 +33,7 @@ jobs:
         run: sleep 5 # Adjust the sleep duration as needed to ensure the server is up
 
       - name: Run Postman Collection with Newman
-        run: newman run store.postman_collection.json -r json --reporter-json-export newman/newman-run-report.json
+        run: newman run store.postman_collection.json -r json
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
