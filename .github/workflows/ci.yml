@@ -33,6 +33,9 @@ jobs:
         run: sleep 5 # Adjust the sleep duration as needed to ensure the server is up
 
       - name: Run Postman Collection with Newman
+        run: newman run store.postman_collection.json
+
+      - name: Create report
         run: newman run store.postman_collection.json -r json
 
       - name: Deploy to GitHub Pages
