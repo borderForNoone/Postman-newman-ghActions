@@ -14,15 +14,17 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install newman-reporter-html newman-reporter-json
 
       - name: Start local server
         run: npm run tern-on-api &
@@ -30,22 +32,16 @@ jobs:
           NODE_ENV: test
 
       - name: Wait for server to be up
-        run: sleep 5 # Adjust the sleep duration as needed to ensure the server is up
+        run: sleep 5
 
       - name: Run Postman Collection with Newman
-        run: newman run store.postman_collection.json -r html,json --reporter-html-export newman-report.html --reporter-json-export newman-report.json
-
-      - name: Upload Newman report artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: newman-reports
-          path: |
-            newman-report.html
-            newman-report.json
+        run: |
+          npx newman run store.postman_collection.json -r html,json --reporter-html-export newman-report.html --reporter-json-export newman-report.json
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
-          personal_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./path-to-your-deploy-directory
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./newman-report
+          user_name: github-actions
+          user_email: github-actions@github.com
